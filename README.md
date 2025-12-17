@@ -1,73 +1,148 @@
-# React + TypeScript + Vite
+# Algorithms and Data Structures Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive web application for visualizing algorithms and data structures.
+The goal of this project is to make complex computer science concepts easier to
+understand through animations, step-by-step execution, and clear visual
+feedback.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About the Project
 
-## React Compiler
+This project was created as part of the **Developing Software Solutions** course
+at the **University of Ljubljana, School of Economics and Business**. It serves as
+a semester project assignment and a personal learning exercise.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+I chose to build an **Algorithms and Data Structures Visualizer** to challenge
+myself with modern front-end technologies and to deepen my understanding of
+fundamental computer science concepts. Beyond fulfilling course requirements,
+the application is designed as an educational tool for anyone who wants to learn
+how algorithms and data structures work internally.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Why This Project?
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- To reinforce and refresh core computer science knowledge
+- To practice building interactive and educational user interfaces
+- To experiment with visualizing abstract logic in a clear and intuitive way
+- To gain hands-on experience with modern front-end tooling
+- To create a reusable learning resource for students and self-learners
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Core Technologies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React** – Component-based UI development
+- **TypeScript** – Type safety and better developer experience
+- **Vite** – Fast development server and build tool
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Visualization & UI
+
+- **React Flow** – Visualizing and animating data structures and algorithm logic
+- **TailwindCSS** – Utility-first styling for rapid UI development
+- **shadcn/ui** – Accessible and reusable UI components
+
+### Tooling
+
+- **Node.js** – Runtime environment
+- **npm / yarn** – Dependency management
+- **Git** – Version control
+
+---
+
+## Features
+
+- Sorting algorithms
+  - Bubble Sort
+  - Merge Sort
+  - Quick Sort
+- Graph algorithms
+  - Breadth-First Search (BFS)
+  - Depth-First Search (DFS)
+  - Dijkstra’s Algorithm
+- Data structures
+  - Linked Lists
+  - Trees
+  - Graphs
+- Interactive controls for stepping through algorithms
+- Customizable visualization settings
+
+---
+
+## Getting Started
+
+### Installation
+
+1. Clone the repository:
+
+  ```bash
+  git clone git@github.com:nyanSpruk/algorithms-visualizer.git
+  cd algorithms-visualizer
+  ```
+
+2. Install dependencies:
+
+  ```bash
+  npm install
+  # or
+  yarn install
+  ```
+
+3. Start the development server:
+
+  ```bash
+  npm run dev
+  # or
+  yarn dev
+  ```
+
+4. Open your browser and navigate to `http://localhost:5173` to view the app.
+
+---
+
+## Usage
+
+- Select an algorithm or data structure from the navigation
+- Adjust settings such as speed or input size
+- Start the visualization to observe step-by-step execution
+- Pause, resume, or reset the animation at any time
+
+---
+
+## Project Goals
+
+- Learn and improve skills with React Flow and shadcn/ui
+- Build a simple but effective interactive educational tool
+- Dynamically visualize classic algorithms and data structures
+- Strengthen understanding of core computer science concepts
+
+---
+
+## TODO
+
+- [ ] Add algorithms and data structures:
+  - [ ] Bubble Sort
+  - [ ] Merge Sort
+  - [ ] Quick Sort
+  - [ ] Breadth-First Search (BFS)
+  - [ ] Depth-First Search (DFS)
+  - [ ] Dijkstra’s Algorithm
+  - [ ] Linked Lists
+  - [ ] Trees
+  - [ ] Graphs
+- [ ] Implement controls (speed, step size)
+- [ ] Support custom user input
+- [ ] Add step-by-step explanations with textual descriptions
+- [ ] Add time and space complexity indicators
+- [ ] Add tests
+- [ ] Mobile layout
+
+---
+
+## Acknowledgements
+
+This README was generated with the help of **LLM-based AI tools** and then
+reviewed and adapted to fit the project requirements.
