@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "./Header";
 import { TooSmallScreen } from "./TooSmallScreen";
 import { useScreenSize } from "hooks/useScreenSize";
+import { Footer } from "./Footer";
 
 export function RootLayout() {
   const location = useLocation();
@@ -19,6 +20,8 @@ export function RootLayout() {
       <main className="flex-1 overflow-y-auto pt-16 pb-12">
         {!isAlwaysAllowed && isSmallScreen ? <TooSmallScreen /> : <Outlet />}
       </main>
+
+      <Footer />
     </div>
   );
 }
