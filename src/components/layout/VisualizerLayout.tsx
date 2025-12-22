@@ -4,7 +4,7 @@ import {
   getAlgorithmsByCategory,
   type AlgorithmId,
 } from "@/lib/algorithms/registry";
-import { Sidebar } from "@/visualizer/Sidebar";
+import { Sidebar } from "@/components/visualization/Sidebar";
 import { Button } from "../ui/button";
 
 const groupedAlgorithms = getAlgorithmsByCategory();
