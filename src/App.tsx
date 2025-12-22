@@ -3,6 +3,7 @@ import "./App.css";
 import { RootLayout } from "./components/layout/RootLayout";
 import Home from "pages/Home";
 import About from "pages/About";
+import { VisualizerLayout } from "./components/layout/VisualizerLayout";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/visualizer" element={<div>TODO Visualizer</div>} />
+          <Route path="/visualizer" element={<VisualizerLayout />} />
           <Route path="/about" element={<About />} />
         </Route>
       </Routes>
