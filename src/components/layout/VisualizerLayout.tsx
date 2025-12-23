@@ -6,6 +6,7 @@ import {
 } from "@/lib/algorithms/registry";
 import { Sidebar } from "@/components/visualization/Sidebar";
 import { Button } from "../ui/button";
+import { VisualizationCanvas } from "@/components/visualization/VisualizationCanvas";
 
 const groupedAlgorithms = getAlgorithmsByCategory();
 const algorithmIds = Object.keys(algorithmRegistry) as AlgorithmId[];
@@ -18,6 +19,38 @@ export function VisualizerLayout() {
     [selectedId],
   );
 
+  const [activePresetId, setActivePresetId] = useState<string>(
+    selectedAlgorithm.presets[0]?.id ?? "custom",
+  );
+  const initialPreset = selectedAlgorithm.presets[0];
+  const [customValues, setCustomValues] = useState<number[]>(
+    clonePresetValues(initialPreset?.value),
+  );
+
+  const activePreset = useMemo(
+    () =>
+      selectedAlgorithm.presets.find((preset) => preset.id === activePresetId),
+    [selectedAlgorithm, activePresetId],
+  );
+
+  const visualizationNodes = useMemo(() => {
+    const numbers =
+      activePresetId === "custom" ? customValues : (activePreset?.value ?? []);
+    return numbers.map((value) => ({ value, status: "default" as const }));
+  }, [activePreset, activePresetId, customValues]);
+
+  function handleAlgorithmSelect(id: AlgorithmId) {
+    setSelectedId(id);
+    const nextAlgorithm = algorithmRegistry[id];
+    const nextPreset = nextAlgorithm.presets[0];
+    setActivePresetId(nextPreset?.id ?? "custom");
+    setCustomValues(clonePresetValues(nextPreset?.value));
+  }
+
+  function clonePresetValues(values?: number[]) {
+    return values ? [...values] : [];
+  }
+
   const isPlaying = false;
 
   return (
@@ -25,7 +58,7 @@ export function VisualizerLayout() {
       <Sidebar
         groupedAlgorithms={groupedAlgorithms}
         selectedId={selectedId}
-        onSelect={setSelectedId}
+        onSelect={handleAlgorithmSelect}
       />
 
       <section className="bg-muted/20 flex flex-1 flex-col gap-6 overflow-y-auto px-4 py-6 lg:px-8">
@@ -95,7 +128,9 @@ export function VisualizerLayout() {
           </div>
 
           <div className="bg-background/60 min-h-130 flex-1 rounded-3xl border p-4 shadow-inner">
-            <div className="bg-background h-full w-full rounded-2xl border"></div>
+            <div className="bg-background h-full w-full rounded-2xl border">
+              <VisualizationCanvas nodes={visualizationNodes} />
+            </div>
           </div>
         </div>
       </section>
