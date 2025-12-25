@@ -13,13 +13,13 @@ export const algorithmList: AlgorithmDefinition[] =
   Object.values(algorithmRegistry);
 
 export function getAlgorithmsByCategory() {
-  return algorithmList.reduce<Record<string, AlgorithmDefinition[]>>(
-    (accumulator, currentAlgo) => {
-      if (!accumulator[currentAlgo.category])
-        accumulator[currentAlgo.category] = [];
-      accumulator[currentAlgo.category].push(currentAlgo);
-      return accumulator;
-    },
-    {},
-  );
+  const grouped: { [category: string]: AlgorithmDefinition[] } = {};
+
+  return algorithmList.reduce((accumulator, currentAlgo) => {
+    if (!accumulator[currentAlgo.category]) {
+      accumulator[currentAlgo.category] = [];
+    }
+    accumulator[currentAlgo.category].push(currentAlgo);
+    return accumulator;
+  }, grouped);
 }

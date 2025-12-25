@@ -1,6 +1,12 @@
 import type { AlgorithmDefinition } from "lib/algorithms/types";
-export type BubbleSortInput = number[];
-export const bubbleSortDefinition: AlgorithmDefinition<BubbleSortInput> = {
+import type { BubbleSortInput } from "./types";
+import { buildBubbleSortVisualization } from "./logic";
+
+export type { BubbleSortInput } from "./types";
+
+const defaultBubbleSortInput: BubbleSortInput = [5, 1, 4, 2, 8];
+
+export const bubbleSortDefinition = {
   id: "bubble-sort",
   name: "Bubble Sort",
   category: "Sorting",
@@ -24,7 +30,9 @@ export const bubbleSortDefinition: AlgorithmDefinition<BubbleSortInput> = {
       id: "random",
       label: "Random",
       description: "Balanced set of numbers.",
-      value: [5, 1, 4, 2, 8],
+      value: [...defaultBubbleSortInput],
     },
   ],
-};
+  defaultInput: [...defaultBubbleSortInput],
+  buildVisualization: buildBubbleSortVisualization,
+} satisfies AlgorithmDefinition<BubbleSortInput>;

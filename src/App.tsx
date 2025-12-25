@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "@xyflow/react/dist/style.css";
 import "./App.css";
 import { RootLayout } from "./components/layout/RootLayout";
 import Home from "pages/Home";

@@ -4,7 +4,7 @@ import { Button } from "ui/button";
 import { cn } from "lib/utils";
 
 type AlgorithmSidebarProps = {
-  groupedAlgorithms: Record<string, AlgorithmDefinition[]>;
+  groupedAlgorithms: Record<string, AlgorithmDefinition<unknown>[]>;
   selectedId: AlgorithmId;
   onSelect: (id: AlgorithmId) => void;
 };

@@ -1,3 +1,5 @@
+import type { VisualizationNodeData } from "./base-node";
+
 export type ArrayNodeStatus =
   | "default"
   | "comparing"
@@ -11,4 +13,12 @@ export type ArrayNodeStatus =
 export interface ArrayNodeState {
   value: number;
   status?: ArrayNodeStatus;
+}
+
+export interface ArrayVisualizationNodeData
+  extends ArrayNodeState,
+    VisualizationNodeData {
+  index: number;
+  maxValue: number;
+  status: ArrayNodeStatus;
 }
