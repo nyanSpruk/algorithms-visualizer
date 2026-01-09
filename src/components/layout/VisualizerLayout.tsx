@@ -61,13 +61,21 @@ export function VisualizerLayout() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
-  const animationBufferMs = 450;
+  const animationBufferMs = Math.max(
+    300,
+    Math.min(700, Math.round(playbackSpeed * 0.5)),
+  );
+  const animationDurationMs = Math.max(
+    320,
+    Math.min(800, Math.round(playbackSpeed * 0.6)),
+  );
 
   const stepCount = visualizationSteps.length;
   const hasSteps = stepCount > 0;
   const canPlayback = stepCount > 1;
   const activeStep = visualizationSteps[currentStepIndex] ?? null;
   const visualizationState = activeStep?.state ?? null;
+  const visualizationOptions = selectedAlgorithm.visualizationOptions ?? {};
   const speedLabel =
     playbackSpeed <= 500
       ? "Fast"
@@ -80,23 +88,33 @@ export function VisualizerLayout() {
   useEffect(() => {
     if (!isPlaying || !canPlayback) return;
     const isAtEnd = currentStepIndex >= stepCount - 1;
-    const timer = window.setTimeout(() => {
-      if (isAtEnd) {
-        setIsPlaying(false);
-        return;
-      }
-
-      setCurrentStepIndex((previous) => {
-        const nextIndex = Math.min(previous + 1, stepCount - 1);
-        if (nextIndex >= stepCount - 1) {
+    const timer = window.setTimeout(
+      () => {
+        if (isAtEnd) {
           setIsPlaying(false);
+          return;
         }
-        return nextIndex;
-      });
-    }, isAtEnd ? 0 : playbackSpeed + animationBufferMs);
+
+        setCurrentStepIndex((previous) => {
+          const nextIndex = Math.min(previous + 1, stepCount - 1);
+          if (nextIndex >= stepCount - 1) {
+            setIsPlaying(false);
+          }
+          return nextIndex;
+        });
+      },
+      isAtEnd ? 0 : playbackSpeed + animationBufferMs,
+    );
 
     return () => window.clearTimeout(timer);
-  }, [isPlaying, canPlayback, currentStepIndex, stepCount, playbackSpeed]);
+  }, [
+    isPlaying,
+    canPlayback,
+    currentStepIndex,
+    stepCount,
+    playbackSpeed,
+    animationBufferMs,
+  ]);
 
   function handlePresetSelect(presetId: string) {
     setCurrentStepIndex(0);
@@ -203,6 +221,7 @@ export function VisualizerLayout() {
                     <Button
                       size="sm"
                       variant={isPlaying ? "destructive" : "default"}
+                      className="text-white"
                       onClick={handlePlayToggle}
                       disabled={!canPlayback}
                     >
@@ -229,7 +248,7 @@ export function VisualizerLayout() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      className="ml-auto"
+                      className="ml-auto text-white"
                       onClick={handleReset}
                       disabled={!hasSteps}
                     >
@@ -280,8 +299,8 @@ export function VisualizerLayout() {
                       className="accent-primary mt-2 w-full"
                     />
                     <div className="text-muted-foreground flex items-center justify-between text-[0.65rem] tracking-wide uppercase">
-                      <span>Slower</span>
                       <span>Faster</span>
+                      <span>Slower</span>
                     </div>
                   </div>
                 </div>
@@ -298,6 +317,9 @@ export function VisualizerLayout() {
               stepDescription={activeStep?.description}
               stepCount={stepCount}
               stepIndex={currentStepIndex}
+              animationDurationMs={animationDurationMs}
+              showControls={visualizationOptions.showCanvasControls ?? true}
+              allowPanZoom={visualizationOptions.allowCanvasPanZoom ?? true}
             />
           </div>
         </div>

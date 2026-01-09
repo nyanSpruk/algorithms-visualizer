@@ -36,4 +36,8 @@ export const bubbleSortDefinition = {
   defaultInput: [...defaultBubbleSortInput],
   buildVisualization: buildBubbleSortVisualization,
   buildVisualizationSteps: buildBubbleSortSteps,
+  visualizationOptions: {
+    showCanvasControls: false,
+    allowCanvasPanZoom: false,
+  },
 } satisfies AlgorithmDefinition<BubbleSortInput>;

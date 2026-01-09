@@ -38,6 +38,10 @@ export interface AlgorithmDefinition<TInput = any> {
   defaultInput: TInput;
   buildVisualization: (input: TInput) => VisualizationState;
   buildVisualizationSteps?: (input: TInput) => VisualizationStep[];
+  visualizationOptions?: {
+    showCanvasControls?: boolean;
+    allowCanvasPanZoom?: boolean;
+  };
 }
 
 export interface AlgorithmRegistry {

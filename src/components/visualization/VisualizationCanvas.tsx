@@ -20,6 +20,9 @@ type VisualizationCanvasProps = {
   stepDescription?: string;
   stepCount?: number;
   stepIndex?: number;
+  animationDurationMs?: number;
+  showControls?: boolean;
+  allowPanZoom?: boolean;
 };
 
 export function VisualizationCanvas({
@@ -30,6 +33,9 @@ export function VisualizationCanvas({
   stepDescription,
   stepCount,
   stepIndex,
+  animationDurationMs = 520,
+  showControls = true,
+  allowPanZoom = true,
 }: VisualizationCanvasProps) {
   const [flowInstance, setFlowInstance] = useState<FlowInstance | null>(null);
 
@@ -54,14 +60,18 @@ export function VisualizationCanvas({
 
   const animatedNodes = useMemo(() => {
     if (!visualization) return [];
+    const opacityDuration = Math.max(
+      180,
+      Math.round(animationDurationMs * 0.7),
+    );
     return visualization.nodes.map((node) => ({
       ...node,
       style: {
-        transition: "transform 420ms ease, opacity 300ms ease",
+        transition: `transform ${animationDurationMs}ms ease-in-out, opacity ${opacityDuration}ms ease-in-out`,
         ...node.style,
       },
     }));
-  }, [visualization]);
+  }, [visualization, animationDurationMs]);
 
   const resolvedStepCount = stepCount ?? 0;
   const resolvedStepIndex = stepIndex ?? 0;
@@ -88,14 +98,16 @@ export function VisualizationCanvas({
           </div>
           <div className="hidden lg:block" aria-hidden="true" />
         </div>
-        <div className="border-border/60 bg-muted/20 flex h-full items-center rounded-2xl border px-4">
-          <ZoomControls
-            disabled={!hasVisualization || !flowInstance || isPlaying}
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-            onReset={handleReset}
-          />
-        </div>
+        {showControls ? (
+          <div className="border-border/60 bg-muted/20 flex h-full items-center rounded-2xl border px-4">
+            <ZoomControls
+              disabled={!hasVisualization || !flowInstance || isPlaying}
+              onZoomIn={handleZoomIn}
+              onZoomOut={handleZoomOut}
+              onReset={handleReset}
+            />
+          </div>
+        ) : null}
       </div>
       <div className="bg-background h-full w-full flex-1 overflow-hidden rounded-2xl border">
         {hasVisualization && visualization ? (
@@ -106,10 +118,10 @@ export function VisualizationCanvas({
             nodesDraggable={false}
             nodesConnectable={false}
             elementsSelectable={false}
-            panOnDrag={!isPlaying}
+            panOnDrag={allowPanZoom && !isPlaying}
             panOnScroll={false}
-            zoomOnScroll={!isPlaying}
-            zoomOnDoubleClick={!isPlaying}
+            zoomOnScroll={allowPanZoom && !isPlaying}
+            zoomOnDoubleClick={allowPanZoom && !isPlaying}
             proOptions={{ hideAttribution: true }}
             onInit={setFlowInstance}
           >
