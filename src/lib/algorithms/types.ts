@@ -21,6 +21,13 @@ export interface VisualizationState {
   edges: VisualizationEdge[];
 }
 
+export interface VisualizationStep {
+  id: string;
+  label?: string;
+  description?: string;
+  state: VisualizationState;
+}
+
 export interface AlgorithmDefinition<TInput = any> {
   id: string;
   name: string;
@@ -30,6 +37,7 @@ export interface AlgorithmDefinition<TInput = any> {
   presets: AlgorithmPreset<TInput>[];
   defaultInput: TInput;
   buildVisualization: (input: TInput) => VisualizationState;
+  buildVisualizationSteps?: (input: TInput) => VisualizationStep[];
 }
 
 export interface AlgorithmRegistry {

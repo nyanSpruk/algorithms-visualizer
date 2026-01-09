@@ -1,5 +1,6 @@
 import type { ArrayNodeStatus } from "@/lib/algorithms/shared/array";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const statusStyles: Record<ArrayNodeStatus, string> = {
   default:
@@ -52,11 +53,16 @@ export function ArrayValueNode({
   const barHeight = MIN_HEIGHT + ratio * HEIGHT_RANGE;
 
   return (
-    <div className="flex h-56 w-24 flex-col items-center justify-end gap-1">
+    <motion.div
+      layout="position"
+      transition={{ type: "spring", stiffness: 120, damping: 40 }}
+      className="flex h-56 w-24 flex-col items-center justify-end gap-1"
+    >
+      {" "}
       <div className="flex h-full w-full flex-col items-center justify-end">
         <div
           className={cn(
-            "flex w-full flex-col items-center justify-end rounded-t-lg border px-1 text-center text-sm font-semibold transition-[height]",
+            "flex w-full flex-col items-center justify-end rounded-t-lg border px-1 text-center text-sm font-semibold transition-[height] duration-300 ease-out",
             statusStyles[status],
           )}
           style={{ height: barHeight }}
@@ -72,6 +78,6 @@ export function ArrayValueNode({
           {statusLabel[status]}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -14,10 +14,22 @@ type FlowInstance = ReactFlowInstance<VisualizationNode, VisualizationEdge>;
 
 type VisualizationCanvasProps = {
   visualization: VisualizationState | null;
+  fitViewKey?: string;
+  isPlaying?: boolean;
+  stepLabel?: string;
+  stepDescription?: string;
+  stepCount?: number;
+  stepIndex?: number;
 };
 
 export function VisualizationCanvas({
   visualization,
+  fitViewKey,
+  isPlaying = false,
+  stepLabel,
+  stepDescription,
+  stepCount,
+  stepIndex,
 }: VisualizationCanvasProps) {
   const [flowInstance, setFlowInstance] = useState<FlowInstance | null>(null);
 
@@ -36,35 +48,68 @@ export function VisualizationCanvas({
   const handleReset = () => flowInstance?.fitView?.({ padding: 0.4 });
 
   useEffect(() => {
-    if (!flowInstance || !hasVisualization || !visualization) return;
+    if (!flowInstance || !hasVisualization || isPlaying) return;
     flowInstance.fitView?.({ padding: 0.4 });
-  }, [flowInstance, hasVisualization, visualization]);
+  }, [flowInstance, hasVisualization, fitViewKey, isPlaying]);
+
+  const animatedNodes = useMemo(() => {
+    if (!visualization) return [];
+    return visualization.nodes.map((node) => ({
+      ...node,
+      style: {
+        transition: "transform 420ms ease, opacity 300ms ease",
+        ...node.style,
+      },
+    }));
+  }, [visualization]);
+
+  const resolvedStepCount = stepCount ?? 0;
+  const resolvedStepIndex = stepIndex ?? 0;
+  const stepSummary =
+    resolvedStepCount > 0
+      ? `Step ${Math.min(resolvedStepIndex + 1, resolvedStepCount)} of ${Math.max(resolvedStepCount, 1)}`
+      : "Step 0 of 0";
 
   return (
     <div className="flex h-full w-full flex-col gap-3">
-      <div className="flex items-center justify-end gap-2">
-        <ZoomControls
-          disabled={!hasVisualization || !flowInstance}
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onReset={handleReset}
-        />
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+        <div className="border-border/60 bg-muted/20 grid flex-1 gap-2 rounded-2xl border px-4 py-3 text-center lg:grid-cols-[auto_1fr_auto] lg:items-center">
+          <div className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+            {stepSummary}
+          </div>
+          <div className="flex flex-col items-center text-center">
+            <p className="text-foreground text-base font-semibold">
+              {stepLabel ?? "Step details"}
+            </p>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              {stepDescription ??
+                "Track comparisons and swaps as the algorithm progresses."}
+            </p>
+          </div>
+          <div className="hidden lg:block" aria-hidden="true" />
+        </div>
+        <div className="border-border/60 bg-muted/20 flex h-full items-center rounded-2xl border px-4">
+          <ZoomControls
+            disabled={!hasVisualization || !flowInstance || isPlaying}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onReset={handleReset}
+          />
+        </div>
       </div>
       <div className="bg-background h-full w-full flex-1 overflow-hidden rounded-2xl border">
         {hasVisualization && visualization ? (
           <ReactFlow
-            nodes={visualization.nodes}
+            nodes={animatedNodes}
             edges={visualization.edges}
             nodeTypes={nodeTypes}
             nodesDraggable={false}
             nodesConnectable={false}
             elementsSelectable={false}
-            panOnDrag
+            panOnDrag={!isPlaying}
             panOnScroll={false}
-            zoomOnScroll
-            zoomOnDoubleClick={false}
-            fitView
-            fitViewOptions={{ padding: 0.4 }}
+            zoomOnScroll={!isPlaying}
+            zoomOnDoubleClick={!isPlaying}
             proOptions={{ hideAttribution: true }}
             onInit={setFlowInstance}
           >

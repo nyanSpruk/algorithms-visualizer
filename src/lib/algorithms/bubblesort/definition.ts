@@ -1,6 +1,6 @@
 import type { AlgorithmDefinition } from "lib/algorithms/types";
 import type { BubbleSortInput } from "./types";
-import { buildBubbleSortVisualization } from "./logic";
+import { buildBubbleSortSteps, buildBubbleSortVisualization } from "./logic";
 
 export type { BubbleSortInput } from "./types";
 
@@ -35,4 +35,5 @@ export const bubbleSortDefinition = {
   ],
   defaultInput: [...defaultBubbleSortInput],
   buildVisualization: buildBubbleSortVisualization,
+  buildVisualizationSteps: buildBubbleSortSteps,
 } satisfies AlgorithmDefinition<BubbleSortInput>;
