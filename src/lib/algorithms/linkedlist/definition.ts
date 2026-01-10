@@ -48,6 +48,8 @@ export const linkedListDefinition = {
   buildVisualization: buildLinkedListVisualization,
   buildVisualizationSteps: buildLinkedListSteps,
   visualizationOptions: {
+    showCanvasControls: false,
+    allowCanvasPanZoom: false,
     autoFitMode: "initial",
     allowAutoFitWhilePlaying: false,
   },

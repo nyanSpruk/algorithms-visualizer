@@ -2,6 +2,10 @@ import type { Edge, Node } from "@xyflow/react";
 
 import type { ArrayVisualizationNodeData } from "./shared/array";
 import type { LinkedListVisualizationNodeData } from "./shared/linked-list";
+import type {
+  QueueFrameNodeData,
+  QueueVisualizationNodeData,
+} from "./shared/queue";
 
 export interface AlgorithmPreset<TInput> {
   id: string;
@@ -12,7 +16,9 @@ export interface AlgorithmPreset<TInput> {
 
 export type VisualizationNode =
   | Node<ArrayVisualizationNodeData, "arrayNode">
-  | Node<LinkedListVisualizationNodeData, "listNode">;
+  | Node<LinkedListVisualizationNodeData, "listNode">
+  | Node<QueueVisualizationNodeData, "queueNode">
+  | Node<QueueFrameNodeData, "queueFrame">;
 
 export type VisualizationEdge = Edge;
 

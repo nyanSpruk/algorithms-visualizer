@@ -9,6 +9,8 @@ import type {
 } from "@/lib/algorithms/types";
 import { ArrayNode } from "@/components/visualization/ArrayNode";
 import { ListNode } from "@/components/visualization/ListNode";
+import { QueueFrameNode } from "@/components/visualization/QueueFrameNode";
+import { QueueNode } from "@/components/visualization/QueueNode";
 
 type FlowInstance = ReactFlowInstance<VisualizationNode, VisualizationEdge>;
 
@@ -50,6 +52,8 @@ export function VisualizationCanvas({
     () => ({
       arrayNode: ArrayNode,
       listNode: ListNode,
+      queueFrame: QueueFrameNode,
+      queueNode: QueueNode,
     }),
     [],
   );
