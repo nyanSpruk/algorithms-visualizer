@@ -36,6 +36,7 @@ export function AlgorithmPresetPicker({
 
     if (value && typeof value === "object") {
       const summary = Object.entries(value as Record<string, unknown>)
+        .filter(([key]) => key !== "operation")
         .map(([key, val]) => `${key}: ${summarizePrimitive(val)}`)
         .join(" · ");
       return summary || null;

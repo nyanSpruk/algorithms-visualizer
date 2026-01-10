@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Background, ReactFlow, type ReactFlowInstance } from "@xyflow/react";
 
@@ -23,6 +23,9 @@ type VisualizationCanvasProps = {
   animationDurationMs?: number;
   showControls?: boolean;
   allowPanZoom?: boolean;
+  autoFitMode?: "initial" | "none" | "always";
+  allowAutoFitWhilePlaying?: boolean;
+  suppressEmptyStateText?: boolean;
 };
 
 export function VisualizationCanvas({
@@ -36,8 +39,12 @@ export function VisualizationCanvas({
   animationDurationMs = 520,
   showControls = true,
   allowPanZoom = true,
+  autoFitMode = "initial",
+  allowAutoFitWhilePlaying = false,
+  suppressEmptyStateText = false,
 }: VisualizationCanvasProps) {
   const [flowInstance, setFlowInstance] = useState<FlowInstance | null>(null);
+  const lastFitKeyRef = useRef<string | null>(null);
 
   const nodeTypes = useMemo(
     () => ({
@@ -54,9 +61,25 @@ export function VisualizationCanvas({
   const handleReset = () => flowInstance?.fitView?.({ padding: 0.4 });
 
   useEffect(() => {
-    if (!flowInstance || !hasVisualization || isPlaying) return;
+    if (!flowInstance || !hasVisualization) return;
+    if (autoFitMode === "none") return;
+    if (isPlaying && !allowAutoFitWhilePlaying) return;
+
+    const resolvedFitKey = fitViewKey ?? "default";
+    const hasFitKey = lastFitKeyRef.current === resolvedFitKey;
+
+    if (autoFitMode === "initial" && hasFitKey) return;
+
     flowInstance.fitView?.({ padding: 0.4 });
-  }, [flowInstance, hasVisualization, fitViewKey, isPlaying]);
+    lastFitKeyRef.current = resolvedFitKey;
+  }, [
+    flowInstance,
+    hasVisualization,
+    fitViewKey,
+    isPlaying,
+    autoFitMode,
+    allowAutoFitWhilePlaying,
+  ]);
 
   const animatedNodes = useMemo(() => {
     if (!visualization) return [];
@@ -109,27 +132,28 @@ export function VisualizationCanvas({
           </div>
         ) : null}
       </div>
-      <div className="bg-background h-full w-full flex-1 overflow-hidden rounded-2xl border">
-        {hasVisualization && visualization ? (
-          <ReactFlow
-            nodes={animatedNodes}
-            edges={visualization.edges}
-            nodeTypes={nodeTypes}
-            nodesDraggable={false}
-            nodesConnectable={false}
-            elementsSelectable={false}
-            panOnDrag={allowPanZoom && !isPlaying}
-            panOnScroll={false}
-            zoomOnScroll={allowPanZoom && !isPlaying}
-            zoomOnDoubleClick={allowPanZoom && !isPlaying}
-            proOptions={{ hideAttribution: true }}
-            onInit={setFlowInstance}
-          >
-            <Background color="hsl(var(--muted-foreground) / 0.2)" gap={30} />
-          </ReactFlow>
-        ) : (
-          <EmptyState />
-        )}
+      <div className="bg-background relative h-full w-full flex-1 overflow-hidden rounded-2xl border">
+        <ReactFlow
+          nodes={animatedNodes}
+          edges={visualization?.edges ?? []}
+          nodeTypes={nodeTypes}
+          nodesDraggable={false}
+          nodesConnectable={false}
+          elementsSelectable={false}
+          panOnDrag={allowPanZoom && !isPlaying}
+          panOnScroll={false}
+          zoomOnScroll={allowPanZoom && !isPlaying}
+          zoomOnDoubleClick={allowPanZoom && !isPlaying}
+          proOptions={{ hideAttribution: true }}
+          onInit={setFlowInstance}
+        >
+          <Background color="hsl(var(--muted-foreground) / 0.2)" gap={30} />
+        </ReactFlow>
+        {!hasVisualization && !suppressEmptyStateText ? (
+          <div className="pointer-events-none absolute inset-0">
+            <EmptyState />
+          </div>
+        ) : null}
       </div>
     </div>
   );

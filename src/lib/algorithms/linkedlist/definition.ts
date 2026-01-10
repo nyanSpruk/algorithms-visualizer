@@ -1,5 +1,5 @@
 import type { AlgorithmDefinition } from "lib/algorithms/types";
-import { buildLinkedListVisualization } from "./logic";
+import { buildLinkedListSteps, buildLinkedListVisualization } from "./logic";
 import type { LinkedListInput } from "./types";
 import { cloneLinkedListInput } from "./types";
 
@@ -19,6 +19,15 @@ export const linkedListDefinition = {
   placeholder: "values=5, 1, 4; target=4; ops=delete:5",
   presets: [
     {
+      id: "build-from-empty",
+      label: "Build from empty",
+      description: "Construct the list node by node.",
+      value: {
+        values: [4, 7, 2, 9],
+        buildFromEmpty: true,
+      },
+    },
+    {
       id: "search-middle",
       label: "Search middle value",
       description: "Demonstrates scanning for a target value in the list.",
@@ -31,9 +40,15 @@ export const linkedListDefinition = {
       value: {
         values: [12, 9, 7, 5],
         target: 5,
+        operation: "remove-tail",
       },
     },
   ],
   defaultInput: cloneLinkedListInput(defaultLinkedListInput),
   buildVisualization: buildLinkedListVisualization,
+  buildVisualizationSteps: buildLinkedListSteps,
+  visualizationOptions: {
+    autoFitMode: "initial",
+    allowAutoFitWhilePlaying: false,
+  },
 } satisfies AlgorithmDefinition<LinkedListInput>;

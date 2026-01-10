@@ -43,8 +43,9 @@ export function VisualizerLayout() {
     [selectedAlgorithm, activePresetId],
   );
 
+  const input = activePreset?.value ?? selectedAlgorithm.defaultInput;
+
   const visualizationSteps = useMemo<VisualizationStep[]>(() => {
-    const input = activePreset?.value ?? selectedAlgorithm.defaultInput;
     if (selectedAlgorithm.buildVisualizationSteps) {
       return selectedAlgorithm.buildVisualizationSteps(input);
     }
@@ -56,7 +57,7 @@ export function VisualizerLayout() {
         state,
       },
     ];
-  }, [selectedAlgorithm, activePreset]);
+  }, [selectedAlgorithm, input]);
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -76,6 +77,10 @@ export function VisualizerLayout() {
   const activeStep = visualizationSteps[currentStepIndex] ?? null;
   const visualizationState = activeStep?.state ?? null;
   const visualizationOptions = selectedAlgorithm.visualizationOptions ?? {};
+  const shouldShowEmptyStateText =
+    selectedAlgorithm.shouldShowEmptyStateText?.(input) ??
+    selectedAlgorithm.presets.length === 0;
+  const suppressEmptyStateText = !shouldShowEmptyStateText;
   const speedLabel =
     playbackSpeed <= 500
       ? "Fast"
@@ -320,6 +325,11 @@ export function VisualizerLayout() {
               animationDurationMs={animationDurationMs}
               showControls={visualizationOptions.showCanvasControls ?? true}
               allowPanZoom={visualizationOptions.allowCanvasPanZoom ?? true}
+              autoFitMode={visualizationOptions.autoFitMode ?? "initial"}
+              allowAutoFitWhilePlaying={
+                visualizationOptions.allowAutoFitWhilePlaying ?? false
+              }
+              suppressEmptyStateText={suppressEmptyStateText}
             />
           </div>
         </div>

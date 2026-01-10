@@ -38,9 +38,12 @@ export interface AlgorithmDefinition<TInput = any> {
   defaultInput: TInput;
   buildVisualization: (input: TInput) => VisualizationState;
   buildVisualizationSteps?: (input: TInput) => VisualizationStep[];
+  shouldShowEmptyStateText?: (input: TInput) => boolean;
   visualizationOptions?: {
     showCanvasControls?: boolean;
     allowCanvasPanZoom?: boolean;
+    autoFitMode?: "initial" | "none" | "always";
+    allowAutoFitWhilePlaying?: boolean;
   };
 }
 
